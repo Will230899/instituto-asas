@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituto Asas</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f8f7f2;color:#3a3a3a}
+header{background:#fff;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,.05);position:sticky;top:0;z-index:10}
+.logo-area{display:flex;align-items:center;gap:15px}
+.logo-area img{width:70px;height:70px;border-radius:50%;object-fit:cover}
+.logo-area h1{font-size:22px;font-weight:600;color:#b59b2a}
+nav a{margin-left:25px;text-decoration:none;color:#555;font-weight:500}
+.hero{padding:120px 20px;text-align:center;background:#b59b2a;color:#fff}
+.hero h2{font-size:40px;margin-bottom:15px}
+section{padding:80px 20px;max-width:1100px;margin:auto}
+.section-title{text-align:center;margin-bottom:40px;font-size:28px;color:#b59b2a}
+.card{background:#fff;padding:35px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.06);text-align:center}
+.agendamento{background:#fff;padding:40px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.agendamento form{display:grid;gap:15px}
+input,select,textarea{padding:12px;border-radius:10px;border:1px solid #ddd;font-family:inherit}
+button{background:#b59b2a;color:#fff;padding:14px;border:none;border-radius:30px;font-weight:600;cursor:pointer}
+button:hover{opacity:.9}
+.contact-info{margin-top:40px;text-align:center;line-height:1.8}
+.social{margin-top:20px;text-align:center}
+.social a{margin:0 10px;color:#b59b2a;font-size:28px}
+footer{text-align:center;padding:30px;background:#3a3a3a;color:#fff;margin-top:60px}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo-area">
+<img src="logo.jpg" alt="Instituto Asas">
+<h1>Instituto Asas</h1>
+</div>
+<nav>
+<a href="#profissionais">Profissionais</a>
+<a href="#agende">Agende</a>
+<a href="#contato">Contato</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Desenvolvimento emocional com acolhimento</h2>
+<p>Cuidado psicológico humanizado</p>
+</section>
+
+<section id="profissionais">
+<h2 class="section-title">Psicólogas</h2>
+<div class="card">
+<p><strong>Dra. Larissa</strong> – Psicóloga Clínica</p>
+<p><strong>Dra. Paola Moro</strong> – Psicóloga Clínica</p>
+</div>
+</section>
+
+<section id="agende">
+<h2 class="section-title">Agende sua consulta</h2>
+<div class="agendamento">
+<form id="formAgendamento">
+<input type="text" placeholder="Nome completo" required>
+<input type="tel" placeholder="Telefone" required>
+
+<select id="profissional" required>
+<option value="">Selecione a profissional</option>
+<option value="larissa">Dra. Larissa</option>
+<option value="paola">Dra. Paola Moro</option>
+</select>
+
+<input type="date" id="data" required>
+<select id="horario" required>
+<option value="">Selecione a profissional e data</option>
+</select>
+
+<button type="submit">Confirmar Agendamento</button>
+</form>
+</div>
+</section>
+
+<section id="contato">
+<h2 class="section-title">Contato</h2>
+<div class="contact-info">
+<p><strong>Endereço:</strong> Av. Champagnat, 304 - 5º andar, sala 503 - Praia da Costa, Vila Velha - ES, 29101-410</p>
+<p><strong>Telefone:</strong> (27) 99923-0190</p>
+</div>
+
+<div class="social">
+<a href="https://wa.me/5527999230190" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<a href="https://instagram.com/SEUINSTAGRAM" target="_blank"><i class="fab fa-instagram"></i></a>
+</div>
+</section>
+
+<footer>
+© 2026 Instituto Asas
+</footer>
+
+<script>
+const disponibilidade = {
+larissa: {inicio:8,fim:16},
+paola: {inicio:10,fim:18}
+};
+
+const profissionalSelect = document.getElementById('profissional');
+const horarioSelect = document.getElementById('horario');
+const dataInput = document.getElementById('data');
+
+function gerarHorarios(){
+horarioSelect.innerHTML='<option value="">Selecione o horário</option>';
+
+const prof = profissionalSelect.value;
+const data = new Date(dataInput.value);
+if(!prof || !dataInput.value) return;
+
+if(data.getDay()===0 || data.getDay()===6){
+horarioSelect.innerHTML='<option>Final de semana indisponível</option>';
+return;
+}
+
+let {inicio,fim} = disponibilidade[prof];
+for(let h=inicio;h<=fim;h++){
+if(h===12) continue;
+let hora = h.toString().padStart(2,'0')+':00';
+let option=document.createElement('option');
+option.value=hora;
+option.textContent=hora;
+horarioSelect.appendChild(option);
+}
+}
+
+profissionalSelect.addEventListener('change',gerarHorarios);
+dataInput.addEventListener('change',gerarHorarios);
+
+document.getElementById('formAgendamento').addEventListener('submit',function(e){
+e.preventDefault();
+alert('Agendamento enviado! Entraremos em contato para confirmação.');
+this.reset();
+horarioSelect.innerHTML='<option value="">Selecione a profissional e data</option>';
+});
+</script>
+
+</body>
+</html>
